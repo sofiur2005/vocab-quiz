@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Quiz Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      text-align: center;
+    }
+    .quiz-container {
+      background: #fff;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      border-radius: 10px;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    .options button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      width: 100%;
+      border: none;
+      background: #007BFF;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .options button:hover {
+      background: #0056b3;
+    }
+    .result {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+    .hide {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <h2>Vocabulary Quiz Game</h2>
+  <div id="quiz">
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="result hide" id="result"></div>
+    <button id="next" class="hide">Next Question</button>
+  </div>
+</div>
+
+<script>
+  const quizData = [
+    {
+      question: "Which of the following words is formed through blending?",
+      options: ["Postman", "Breakfast", "Brunch", "Rewrite"],
+      answer: "Brunch"
+    },
+    {
+      question: "Which of the following is an acronym?",
+      options: ["Ad", "NASA", "Info", "Bio"],
+      answer: "NASA"
+    },
+    {
+      question: "What does 'e.g.' stand for?",
+      options: ["Example Given", "Equal Grade", "Exempli gratia", "Exact Guess"],
+      answer: "Exempli gratia"
+    },
+    {
+      question: "What is the antonym of 'increase'?",
+      options: ["Maximize", "Grow", "Reduce", "Double"],
+      answer: "Reduce"
+    },
+    {
+      question: "The prefix 'anti-' in 'antibiotic' means:",
+      options: ["Before", "Against", "Around", "Under"],
+      answer: "Against"
+    }
+  ];
+
+  let currentQuestion = 0;
+  let score = 0;
+
+  const questionEl = document.getElementById("question");
+  const optionsEl = document.getElementById("options");
+  const resultEl = document.getElementById("result");
+  const nextBtn = document.getElementById("next");
+
+  function loadQuestion() {
+    resultEl.classList.add("hide");
+    nextBtn.classList.add("hide");
+    const q = quizData[currentQuestion];
+    questionEl.textContent = q.question;
+    optionsEl.innerHTML = "";
+    q.options.forEach(option => {
+      const btn = document.createElement("button");
+      btn.textContent = option;
+      btn.onclick = () => selectOption(option);
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  function selectOption(selected) {
+    const correct = quizData[currentQuestion].answer;
+    if (selected === correct) {
+      resultEl.textContent = "✅ Correct!";
+      score++;
+    } else {
+      resultEl.textContent = `❌ Wrong! Correct answer: ${correct}`;
+    }
+    resultEl.classList.remove("hide");
+    nextBtn.classList.remove("hide");
+  }
+
+  nextBtn.onclick = () => {
+    currentQuestion++;
+    if (currentQuestion < quizData.length) {
+      loadQuestion();
+    } else {
+      showFinalScore();
+    }
+  };
+
+  function showFinalScore() {
+    questionEl.textContent = "🎉 Quiz Completed!";
+    optionsEl.innerHTML = "";
+    resultEl.textContent = `Your Score: ${score}/${quizData.length}`;
+    resultEl.classList.remove("hide");
+    nextBtn.classList.add("hide");
+  }
+
+  loadQuestion();
+</script>
+
+</body>
+</html>
